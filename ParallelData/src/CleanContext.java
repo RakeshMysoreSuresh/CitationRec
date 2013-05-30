@@ -22,14 +22,13 @@ public class CleanContext {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-		SnowballAnalyzer analyzer = new SnowballAnalyzer(Version.LUCENE_35, "SnowballFilter");
+		SnowballAnalyzer analyzer = new SnowballAnalyzer(Version.LUCENE_36, "SnowballFilter");
 		TokenStream tokenStream = analyzer.tokenStream("test",
 				new StringReader("I am an Idiot"));
 		System.out.println(tokenStream.toString());
 	}
 	
-	public void removeStopWords(String input) throws IOException {
+	/*public void removeStopWords(String input) throws IOException {
 		// input string
 		Version matchVersion = Version.LUCENE_35; // Substitute desired Lucene
 													// version for XY
@@ -40,10 +39,10 @@ public class CleanContext {
 
 		// tokenStream = new EnglishMinimalStemFilter(tokenStream);
 		// remove stop words
-		/*
+		
 		 * tokenStream = new StopFilter(Version.LUCENE_35, tokenStream,
 		 * EnglishAnalyzer.getDefaultStopSet());
-		 */
+		 
 
 		// retrieve the remaining tokens
 		CharTermAttribute token = tokenStream
@@ -73,6 +72,6 @@ public class CleanContext {
 			w.println(builder.toString());
 		}
 		
-	}
+	}*/
 
 }
