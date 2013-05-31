@@ -6,10 +6,12 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Set;
 
-import org.apache.lucene.analysis.CharArrayMap.EntrySet;
+//import org.apache.lucene.analysis.CharArrayMap.EntrySet;
 
 
 public class ICFCalc {
@@ -17,6 +19,15 @@ public class ICFCalc {
 	HashMap<String, Long> map = new HashMap<>();
 //	List<HashMap<String, Integer>> mapList =
 //			new ArrayList<HashMap<String, Integer>>();
+	
+	public ICFCalc() {
+		try {
+			readDataStruct("VcbFile.ser");
+		} catch (ClassNotFoundException | IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 	
 	/**
 	 * @param args
@@ -29,15 +40,15 @@ public class ICFCalc {
 		calc.words2ID("Context.txt");
 		calc.storeDataStruct();
 		calc.readDataStruct("VcbFile.ser");
-		
+		calc.storeDataStruct();
 	}
 	
-	public void  words2ID(String fileName) throws IOException {
+	public void words2ID(String fileName) throws IOException {
 		BufferedReader r = new BufferedReader(new FileReader(fileName));
 		int count=0;
 		String string;
 		while((string = r.readLine())!=null){
-			String[] words = string.split("[ 	]+");
+			String[] words = string.split(" ");
 			for(String w : words){
 				Long l = map.get(w);				
 				if(l==null){
@@ -55,11 +66,12 @@ public class ICFCalc {
 	
 	void storeDataStruct() throws FileNotFoundException, IOException{
 		ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream("VcbFile.ser"));
-		out.writeObject(map);
+		//out.writeObject(map);
 		
-		Iterator<String> e = map.keySet().iterator();
-		for(int i =0; i<100; i++){
-			System.out.println(get(e.next()));
+		PrintWriter w = new PrintWriter("Vcb.Context");
+		Set<String> e = map.keySet();
+		for(String s: e){
+			w.println(get(s));
 		}
 		out.close();
 	}
@@ -78,9 +90,18 @@ public class ICFCalc {
 		long l = map.get(word);
 		int count = (int)(l&(((long)1<<32)-1));
 		int id = (int)(l>>32);
-		return word + " "+ id + " " + count;
+		return id + " "+ word + " " + count;
 	}
 	
-	stopStem()
+	int getFreq(String word){
+		long l = map.get(word);
+		return (int)(l&(((long)1<<32)-1));
+	}
+	
+	int getID(String word){
+		long l = map.get(word);
+		int id = (int)(l>>32);
+		return id;
+	}
 
 }

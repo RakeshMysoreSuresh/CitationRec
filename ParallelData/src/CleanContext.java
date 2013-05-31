@@ -3,6 +3,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.io.Reader;
 import java.io.StringReader;
 import java.util.HashSet;
 
@@ -20,11 +21,22 @@ public class CleanContext {
 	
 	/**
 	 * @param args
+	 * @throws IOException 
 	 */
-	public static void main(String[] args) {
-		SnowballAnalyzer analyzer = new SnowballAnalyzer(Version.LUCENE_36, "SnowballFilter");
+	public static void main(String[] args) throws IOException {
+		Analyzer analyzer = new Analyzer(){
+
+			@Override
+			protected TokenStreamComponents createComponents(String fieldName,
+					Reader reader) {
+				// TODO Auto-generated method stub
+				return null;
+			}
+			
+		};
+		/*SnowballAnalyzer(Version.LUCENE_36, "SnowballFilter");
 		TokenStream tokenStream = analyzer.tokenStream("test",
-				new StringReader("I am an Idiot"));
+				new StringReader("I am an Idiot"));*/
 		System.out.println(tokenStream.toString());
 	}
 	
